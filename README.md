@@ -1,5 +1,7 @@
 # hw-sandbox
 
+[![Build Status](https://travis-ci.com/luizribeiro/hw-sandbox.svg?branch=master)](https://travis-ci.com/luizribeiro/hw-sandbox)
+
 ## Running
 
 1. `brew install platformio`
