@@ -1,5 +1,4 @@
-// Demo program for testing library and board - flip the switch to turn on/off buzzer
-
+#include <Arduino.h>
 #include <Adafruit_CircuitPlayground.h>
 
 // we light one pixel at a time, this is our counter
