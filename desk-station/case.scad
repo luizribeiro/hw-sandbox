@@ -28,4 +28,23 @@ module snapping_pin(
   }
 }
 
-snapping_pin();
+module case_shape(
+  corner_radius = 10.0,
+  height = 50.0,
+  depth = 60.0,
+  angle = 30.0,
+  width = 90.0,
+) {
+  rotate([90, 0, 90]) minkowski() {
+    sphere(r=corner_radius);
+    linear_extrude(height=width)
+      polygon(points=[
+        [0, 0],
+        [depth, 0],
+        [depth, height],
+        [depth * tan(angle), height],
+      ]);
+  }
+}
+
+case_shape();
