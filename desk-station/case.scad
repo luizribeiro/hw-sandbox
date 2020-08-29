@@ -47,4 +47,39 @@ module case_shape(
   }
 }
 
-case_shape();
+module case_shell(
+  corner_radius = 10.0,
+  height = 50.0,
+  depth = 60.0,
+  angle = 30.0,
+  width = 90.0,
+  shell_width = 5.0,
+) {
+  difference() {
+    case_shape(
+      corner_radius=corner_radius,
+      height=height,
+      depth=depth,
+      angle=angle,
+      width=width
+    );
+    translate([shell_width / 2, shell_width / 2, shell_width / 2])
+      scale([
+        1 - shell_width / (corner_radius * 2 + width),
+        1 - shell_width / (corner_radius * 2 + depth),
+        1 - shell_width / (corner_radius * 2 + height),
+      ])
+      case_shape(
+        corner_radius=corner_radius,
+        height=height,
+        depth=depth,
+        angle=angle,
+        width=width
+      );
+  }
+}
+
+difference() {
+  case_shell();
+  cube(120);
+}
