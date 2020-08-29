@@ -28,22 +28,26 @@ module snapping_pin(
   }
 }
 
-module case_shape(
-  corner_radius = 10.0,
-  height = 50.0,
-  depth = 60.0,
-  angle = 30.0,
-  width = 90.0,
+module case_side_polygon(depth, height, angle) {
+  polygon(points=[
+    [0, 0],
+    [depth, 0],
+    [depth, height],
+    [depth * tan(angle), height],
+  ]);
+}
+
+module solid_case(
+  corner_radius,
+  height,
+  depth,
+  angle,
+  width,
 ) {
   rotate([90, 0, 90]) minkowski() {
     sphere(r=corner_radius);
     linear_extrude(height=width)
-      polygon(points=[
-        [0, 0],
-        [depth, 0],
-        [depth, height],
-        [depth * tan(angle), height],
-      ]);
+      case_side_polygon(depth, height, angle);
   }
 }
 
@@ -56,7 +60,7 @@ module case_shell(
   shell_width = 5.0,
 ) {
   difference() {
-    case_shape(
+    solid_case(
       corner_radius=corner_radius,
       height=height,
       depth=depth,
@@ -69,7 +73,7 @@ module case_shell(
         1 - shell_width / (corner_radius * 2 + depth),
         1 - shell_width / (corner_radius * 2 + height),
       ])
-      case_shape(
+      solid_case(
         corner_radius=corner_radius,
         height=height,
         depth=depth,
