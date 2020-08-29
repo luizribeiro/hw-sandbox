@@ -1,3 +1,6 @@
-.pio
+*.ctb
+*.stl
+.DS_Store
 .clangd
+.pio
 secrets.h
