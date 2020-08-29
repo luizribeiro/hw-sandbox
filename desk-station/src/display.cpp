@@ -8,7 +8,7 @@
 #include "sensor.h"
 
 #define EPD_CS 15
-#define EPD_DC 0
+#define EPD_DC 2
 #define SRAM_CS 16
 #define EPD_RESET -1
 #define EPD_BUSY -1
