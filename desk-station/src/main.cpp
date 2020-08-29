@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 
+#include "display.h"
 #include "secrets.h"
 #include "sensor.h"
 
@@ -9,6 +10,8 @@ const char *host = "wifitest.adafruit.com";
 void setup() {
   Serial.begin(115200);
   delay(100);
+
+  initDisplay();
 
   if (!initSensor()) {
     Serial.println("Could not find a valid BME680 sensor, check wiring!");
@@ -37,6 +40,8 @@ void loop() {
     Serial.println("Failed to perform reading :(");
     return;
   }
+
+  drawMeasurement(measurement);
 
   Serial.print("Temperature = ");
   Serial.print(measurement.temperature);
