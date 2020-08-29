@@ -2,12 +2,19 @@
 #include <ESP8266WiFi.h>
 
 #include "secrets.h"
+#include "sensor.h"
 
 const char *host = "wifitest.adafruit.com";
 
 void setup() {
   Serial.begin(115200);
   delay(100);
+
+  if (!initSensor()) {
+    Serial.println("Could not find a valid BME680 sensor, check wiring!");
+    while (1)
+      ;
+  }
 
   Serial.print("Connecting to ");
   Serial.println(SSID);
@@ -25,31 +32,32 @@ void setup() {
 }
 
 void loop() {
-  delay(5000);
-
-  Serial.print("connecting to ");
-  Serial.println(host);
-
-  WiFiClient client;
-  const int httpPort = 80;
-  if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
+  struct Measurement measurement = readSensor();
+  if (!measurement.success) {
+    Serial.println("Failed to perform reading :(");
     return;
   }
 
-  String url = "/testwifi/index.html";
-  Serial.print("Requesting URL: ");
-  Serial.println(url);
+  Serial.print("Temperature = ");
+  Serial.print(measurement.temperature);
+  Serial.println(" *C");
 
-  client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host +
-               "\r\n" + "Connection: close\r\n\r\n");
-  delay(500);
+  Serial.print("Pressure = ");
+  Serial.print(measurement.pressure);
+  Serial.println(" hPa");
 
-  while (client.available()) {
-    String line = client.readStringUntil('\r');
-    Serial.print(line);
-  }
+  Serial.print("Humidity = ");
+  Serial.print(measurement.humidity);
+  Serial.println(" %");
+
+  Serial.print("Gas = ");
+  Serial.print(measurement.gas_resistance);
+  Serial.println(" KOhms");
+
+  Serial.print("Approx. Altitude = ");
+  Serial.print(measurement.altitude);
+  Serial.println(" m");
 
   Serial.println();
-  Serial.println("closing connection");
+  delay(2000);
 }
