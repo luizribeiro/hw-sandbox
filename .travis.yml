@@ -13,4 +13,4 @@ install:
   - platformio update
 
 script:
-  - platformio run
+  - cd circuit-playground && platformio run
