@@ -1,5 +1,5 @@
-#include <Arduino.h>
 #include <Adafruit_CircuitPlayground.h>
+#include <Arduino.h>
 
 // we light one pixel at a time, this is our counter
 uint8_t pixeln = 0;
@@ -11,7 +11,6 @@ void setup() {
   CircuitPlayground.begin();
 }
 
-
 void loop() {
   // turn off speaker when not in use
   CircuitPlayground.speaker.enable(false);
@@ -22,14 +21,22 @@ void loop() {
   CircuitPlayground.redLED(LOW);
 
   /************* TEST CAPTOUCH */
-  Serial.print("Capsense #3: "); Serial.println(CircuitPlayground.readCap(3));
-  Serial.print("Capsense #2: "); Serial.println(CircuitPlayground.readCap(2));
-  Serial.print("Capsense #0: "); Serial.println(CircuitPlayground.readCap(0));
-  Serial.print("Capsense #1: "); Serial.println(CircuitPlayground.readCap(1));
-  Serial.print("Capsense #12: "); Serial.println(CircuitPlayground.readCap(12));
-  Serial.print("Capsense #6: "); Serial.println(CircuitPlayground.readCap(6));
-  Serial.print("Capsense #9: "); Serial.println(CircuitPlayground.readCap(9));
-  Serial.print("Capsense #10: "); Serial.println(CircuitPlayground.readCap(10));
+  Serial.print("Capsense #3: ");
+  Serial.println(CircuitPlayground.readCap(3));
+  Serial.print("Capsense #2: ");
+  Serial.println(CircuitPlayground.readCap(2));
+  Serial.print("Capsense #0: ");
+  Serial.println(CircuitPlayground.readCap(0));
+  Serial.print("Capsense #1: ");
+  Serial.println(CircuitPlayground.readCap(1));
+  Serial.print("Capsense #12: ");
+  Serial.println(CircuitPlayground.readCap(12));
+  Serial.print("Capsense #6: ");
+  Serial.println(CircuitPlayground.readCap(6));
+  Serial.print("Capsense #9: ");
+  Serial.println(CircuitPlayground.readCap(9));
+  Serial.print("Capsense #10: ");
+  Serial.println(CircuitPlayground.readCap(10));
   delay(10);
 
   /************* TEST SLIDE SWITCH */
@@ -43,7 +50,9 @@ void loop() {
   delay(10);
 
   /************* TEST 10 NEOPIXELS */
-  CircuitPlayground.setPixelColor(pixeln++, CircuitPlayground.colorWheel(25 * pixeln));
+  CircuitPlayground.setPixelColor(pixeln,
+                                  CircuitPlayground.colorWheel(25 * pixeln));
+  pixeln++;
   if (pixeln == 11) {
     pixeln = 0;
     CircuitPlayground.clearPixels();
