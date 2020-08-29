@@ -12,7 +12,10 @@ install:
   - pip install -U platformio
   - platformio update
 
+before_script:
+  - cp desk-station/src/secrets-example.h desk-station/src/secrets.h
+
 script:
-  - cd arduino-epd && platformio run
-  - cd circuit-playground && platformio run
-  - cd desk-station && platformio run
+  - ( cd arduino-epd && platformio run )
+  - ( cd circuit-playground && platformio run )
+  - ( cd desk-station && platformio run )
