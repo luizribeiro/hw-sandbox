@@ -111,7 +111,18 @@ module case_shell() {
         linear_extrude(height=(
           CASE_WIDTH + (CASE_CORNER_RADIUS + CASE_THICKNESS) * 2 + EPSILON
         ))
-        side_holes_polygon(CASE_DEPTH, CASE_HEIGHT);
+        intersection() {
+          case_side_polygon();
+          side_holes_polygon(CASE_DEPTH, CASE_HEIGHT);
+        }
+
+      translate([
+        0,
+        CASE_HEIGHT / tan(CASE_ANGLE),
+        CASE_HEIGHT + CASE_CORNER_RADIUS - EPSILON,
+      ])
+        linear_extrude(height=CASE_THICKNESS)
+        side_holes_polygon(CASE_WIDTH, CASE_DEPTH - CASE_HEIGHT / tan(CASE_ANGLE));
 
       display_hole();
       back_hole();
@@ -122,7 +133,7 @@ module case_shell() {
 module side_holes_polygon(width, height) {
   intersection() {
     step = SIDE_HOLE_RADIUS / SIDE_HOLE_DENSITY;
-    case_side_polygon();
+    square([width, height]);
     for (x = [-step : step : width + step])
       for (y = [((x / step) % 2) * SIDE_HOLE_RADIUS - step: step : height + step])
         translate([x, y]) circle(r=SIDE_HOLE_RADIUS);
