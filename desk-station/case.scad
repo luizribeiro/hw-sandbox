@@ -3,14 +3,14 @@
  */
 
 // Case dimensions
-CASE_DEPTH = 60.0;
-CASE_HEIGHT = 50.0;
+CASE_DEPTH = 55.0;
+CASE_HEIGHT = 30.0;
 CASE_THICKNESS = 5.0;
-CASE_WIDTH = 90.0;
+CASE_WIDTH = 85.0;
 
 // Case appearence
 CASE_ANGLE = 30.0;
-CASE_CORNER_RADIUS = 10.0;
+CASE_CORNER_RADIUS = 5.0;
 
 // Side-hole settings
 CASE_HAS_HOLES = true;
