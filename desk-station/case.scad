@@ -2,6 +2,16 @@
  * All dimensions on this file are in mm.
  */
 
+// Case settings
+CASE_ANGLE = 30.0;
+CASE_CORNER_RADIUS = 10.0;
+CASE_DEPTH = 60.0;
+CASE_HEIGHT = 50.0;
+CASE_SHELL_WIDTH = 5.0;
+CASE_WIDTH = 90.0;
+SIDE_HOLE_RADIUS = 2.5;
+SIDE_HOLE_DENSITY = 0.35;
+
 $fn = 100;
 
 module snapping_pin(
@@ -52,12 +62,12 @@ module solid_case(
 }
 
 module case_shell(
-  corner_radius = 10.0,
-  height = 50.0,
-  depth = 60.0,
-  angle = 30.0,
-  width = 90.0,
-  shell_width = 5.0,
+  corner_radius,
+  height,
+  depth,
+  angle,
+  width,
+  shell_width,
 ) {
   difference() {
     solid_case(
@@ -80,10 +90,28 @@ module case_shell(
         angle=angle,
         width=width
       );
+    translate([-CASE_CORNER_RADIUS * 2, 0, 0])
+      rotate([90, 0, 90])
+      linear_extrude(height=(CASE_WIDTH + CASE_CORNER_RADIUS * 4))
+        side_holes_polygon();
   }
 }
 
-difference() {
-  case_shell();
-  cube(120);
+module side_holes_polygon() {
+  intersection() {
+    step = SIDE_HOLE_RADIUS / SIDE_HOLE_DENSITY;
+    case_side_polygon(CASE_DEPTH, CASE_HEIGHT, CASE_ANGLE);
+    for (x = [-step : step : CASE_DEPTH + step])
+      for (y = [((x / step) % 2) * SIDE_HOLE_RADIUS - step: step : CASE_HEIGHT + step])
+        translate([x, y]) circle(r=SIDE_HOLE_RADIUS);
+  }
 }
+
+case_shell(
+  CASE_CORNER_RADIUS,
+  CASE_HEIGHT,
+  CASE_DEPTH,
+  CASE_ANGLE,
+  CASE_WIDTH,
+  CASE_SHELL_WIDTH
+);
