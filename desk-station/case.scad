@@ -65,6 +65,18 @@ module solid_case() {
   }
 }
 
+module display_hole() {
+  rotate([CASE_ANGLE - 180, 0, 0])
+    translate([
+      0,
+      -CASE_HEIGHT * sin(CASE_ANGLE),
+      -CASE_CORNER_RADIUS + CASE_THICKNESS / 2
+    ])
+    translate([CASE_WIDTH - 80, 0, 0])
+    translate([6, 6, -CASE_THICKNESS])
+      cube([62.6, 29.6, CASE_THICKNESS]);
+}
+
 module case_shell() {
   difference() {
     solid_case();
@@ -80,6 +92,8 @@ module case_shell() {
         rotate([90, 0, 90])
         linear_extrude(height=(CASE_WIDTH + CASE_CORNER_RADIUS * 4))
           side_holes_polygon();
+
+      display_hole();
     }
   }
 }
