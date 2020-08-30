@@ -23,6 +23,7 @@ DISPLAY_PCB_HEIGHT = 47;
 
 // Misc
 EPSILON = 0.1;
+RENDER_PCBS = $preview;
 
 $fn = $preview ? 12 : 100;
 
@@ -163,14 +164,72 @@ module mcu_support() {
     snapping_pin(standoff_height=8);
 }
 
+module sensor_pcb() {
+  PCB_WIDTH = 17.8;
+  PCB_HEIGHT = 25;
+  PCB_THICKNESS = 1.6;
+  PCB_HOLE_RADIUS = 1.2;
+  PCB_HOLE_DISTANCE_FROM_EDGE = 1.2 + PCB_HOLE_RADIUS;
+
+  color("green") {
+    translate([
+      -PCB_HOLE_DISTANCE_FROM_EDGE,
+      -PCB_HOLE_DISTANCE_FROM_EDGE,
+      0,
+    ])
+      difference() {
+        cube([PCB_WIDTH, PCB_HEIGHT, PCB_THICKNESS]);
+
+        translate([
+          PCB_HOLE_DISTANCE_FROM_EDGE,
+          PCB_HOLE_DISTANCE_FROM_EDGE,
+          -EPSILON,
+        ])
+          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+            circle(r=PCB_HOLE_RADIUS);
+
+        translate([
+          PCB_HOLE_DISTANCE_FROM_EDGE,
+          PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
+          -EPSILON,
+        ])
+          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+            circle(r=PCB_HOLE_RADIUS);
+
+        translate([
+          PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
+          PCB_HOLE_DISTANCE_FROM_EDGE,
+          -EPSILON,
+        ])
+          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+            circle(r=PCB_HOLE_RADIUS);
+
+        translate([
+          PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
+          PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
+          -EPSILON,
+        ])
+          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+            circle(r=PCB_HOLE_RADIUS);
+      }
+  }
+}
+
 module sensor_support() {
-  snapping_pin(standoff_height=25);
-  translate([0, 17.8 + 2.2, 0])
-    snapping_pin(standoff_height=25);
-  translate([10.2 + 2.2, 0, 0])
-    snapping_pin(standoff_height=25);
-  translate([10.2 + 2.2, 17.8 + 2.2, 0])
-    snapping_pin(standoff_height=25);
+  STANDOFF_HEIGHT = 25;
+
+  snapping_pin(standoff_height=STANDOFF_HEIGHT);
+  translate([0, 18 + 2.2, 0])
+    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+  translate([10.8 + 2.2, 0, 0])
+    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+  translate([10.8 + 2.2, 18 + 2.2, 0])
+    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+
+  if (RENDER_PCBS) {
+    translate([0, 0, STANDOFF_HEIGHT])
+      sensor_pcb();
+  }
 }
 
 module display_support() {
@@ -221,7 +280,7 @@ module component_supports() {
     display_support();
 }
 
-difference() {
+union() {
   case_shell();
   intersection() {
     component_supports();
