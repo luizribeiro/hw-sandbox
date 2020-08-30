@@ -36,14 +36,15 @@ module snapping_pin(
   snap_cone_gap_height = 5,
   standoff_height = 5,
   standoff_width = 3,
-  base_height = 2.5,
+  base_height = 2.0,
   base_diameter = 6,
+  base_extension = 0.0,
 ) {
   difference() {
     union() {
       cylinder(h=standoff_height, r=standoff_width / 2);
       translate([0, 0, -base_height])
-        cylinder(h=base_height, r=base_diameter / 2);
+        cylinder(h=base_height + base_extension, r=base_diameter / 2);
       translate([0, 0, standoff_height]) {
         cylinder(h=board_thickness, r=hole_diameter / 2);
         translate([0, 0, board_thickness])
@@ -62,7 +63,7 @@ module snapping_pin(
 
 module render_pcb() {
   if (RENDER_PCBS) {
-    color("green", 1.0) {
+    color("green", 0.5) {
       children();
     }
   }
@@ -130,7 +131,7 @@ module case_shell() {
         CASE_HEIGHT / tan(CASE_ANGLE),
         CASE_HEIGHT + CASE_CORNER_RADIUS - EPSILON,
       ])
-        linear_extrude(height=CASE_THICKNESS)
+        linear_extrude(height=CASE_THICKNESS + EPSILON * 2)
         side_holes_polygon(CASE_WIDTH, CASE_DEPTH - CASE_HEIGHT / tan(CASE_ANGLE));
 
       display_hole();
@@ -215,18 +216,19 @@ module mcu_pcb() {
 
 module mcu_support() {
   STANDOFF_HEIGHT = 8;
+  BASE_EXTENSION = 5;
 
   // back supports, which are a bit smaller
   translate([-0.55, 0.2, 0])
-    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+    snapping_pin(standoff_height=STANDOFF_HEIGHT, base_extension=BASE_EXTENSION);
   translate([18.55, 0.2, 0])
-    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+    snapping_pin(standoff_height=STANDOFF_HEIGHT, base_extension=BASE_EXTENSION);
 
   // front supports (near USB connector)
   translate([0.05, 47.1, 0])
-    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+    snapping_pin(standoff_height=STANDOFF_HEIGHT, base_extension=BASE_EXTENSION);
   translate([18, 47.1, 0])
-    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+    snapping_pin(standoff_height=STANDOFF_HEIGHT, base_extension=BASE_EXTENSION);
 
   render_pcb() {
     translate([0, 0, STANDOFF_HEIGHT])
@@ -398,13 +400,13 @@ module component_supports() {
 }
 
 union() {
-  case_shell();
-
-  intersection() {
+  if ($preview) {
+    case_shell();
     component_supports();
-    minkowski() {
-      sphere(r=(CASE_THICKNESS + CASE_CORNER_RADIUS));
-      solid_case();
+  } else {
+    difference() {
+      case_shell();
+      component_supports();
     }
   }
 }
