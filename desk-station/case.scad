@@ -83,11 +83,11 @@ module display_hole() {
     translate([
       0,
       -CASE_HEIGHT * sin(CASE_ANGLE),
-      -CASE_CORNER_RADIUS - CASE_THICKNESS - 1
+      -CASE_CORNER_RADIUS - CASE_THICKNESS - EPSILON
     ])
     translate([(CASE_WIDTH - DISPLAY_PCB_WIDTH) / 2, 0, 0])
     translate([SCREEN_OFFSET, SCREEN_OFFSET, 0])
-      cube([SCREEN_WIDTH, SCREEN_HEIGHT, CASE_THICKNESS + 2]);
+      cube([SCREEN_WIDTH, SCREEN_HEIGHT, CASE_THICKNESS + EPSILON * 2]);
 }
 
 module back_hole() {
@@ -130,8 +130,7 @@ module side_holes_polygon() {
 }
 
 module case_top_mask() {
-  // increase radius by 1 so we fully remove the side walls
-  radius = CASE_CORNER_RADIUS + CASE_THICKNESS + 1;
+  radius = CASE_CORNER_RADIUS + CASE_THICKNESS + EPSILON;
   translate([-radius, -radius, 0])
     cube([
       CASE_WIDTH + radius * 2,
