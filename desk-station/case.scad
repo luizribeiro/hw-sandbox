@@ -89,4 +89,18 @@ module side_holes_polygon() {
   }
 }
 
-case_shell();
+module case_top_mask() {
+  // increase radius by 1 so we fully remove the side walls
+  radius = CASE_CORNER_RADIUS + 1;
+  translate([-radius, -CASE_CORNER_RADIUS, 0])
+    cube([
+      CASE_WIDTH + radius * 2,
+      CASE_HEIGHT + CASE_CORNER_RADIUS * 2,
+      CASE_DEPTH + CASE_CORNER_RADIUS * 2,
+    ]);
+}
+
+difference() {
+  case_shell();
+  case_top_mask();
+}
