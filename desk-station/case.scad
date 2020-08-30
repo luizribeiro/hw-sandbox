@@ -32,10 +32,14 @@ module snapping_pin(
   snap_cone_gap_height = 5,
   standoff_height = 5,
   standoff_width = 3,
+  base_height = 2.5,
+  base_diameter = 6,
 ) {
   difference() {
     union() {
       cylinder(h=standoff_height, r=standoff_width / 2);
+      translate([0, 0, -base_height])
+        cylinder(h=base_height, r=base_diameter / 2);
       translate([0, 0, standoff_height]) {
         cylinder(h=board_thickness, r=hole_diameter / 2);
         translate([0, 0, board_thickness])
