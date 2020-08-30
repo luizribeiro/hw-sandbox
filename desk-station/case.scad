@@ -196,7 +196,7 @@ module component_supports() {
     // these components are on the bottom face of the case
     translate([3, 10, 0])
       mcu_support();
-    translate([40, 33, 0])
+    translate([60, 25, 0])
       sensor_support();
   }
 
