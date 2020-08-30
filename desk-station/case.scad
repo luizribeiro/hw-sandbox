@@ -62,7 +62,7 @@ module snapping_pin(
 
 module render_pcb() {
   if (RENDER_PCBS) {
-    color("green", 0.5) {
+    color("green", 1.0) {
       children();
     }
   }
@@ -214,19 +214,22 @@ module mcu_pcb() {
 }
 
 module mcu_support() {
+  STANDOFF_HEIGHT = 8;
+
   // back supports, which are a bit smaller
-  snapping_pin(standoff_height=8);
-  translate([15.2 + 2.2, 0, 0])
-    snapping_pin(standoff_height=8);
+  translate([-0.55, 0.2, 0])
+    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+  translate([18.55, 0.2, 0])
+    snapping_pin(standoff_height=STANDOFF_HEIGHT);
 
   // front supports (near USB connector)
-  translate([0, 43.4 + 2.2, 0])
-    snapping_pin(standoff_height=8);
-  translate([15.2 + 2.2, 43.4 + 2.2, 0])
-    snapping_pin(standoff_height=8);
+  translate([0.05, 47.1, 0])
+    snapping_pin(standoff_height=STANDOFF_HEIGHT);
+  translate([18, 47.1, 0])
+    snapping_pin(standoff_height=STANDOFF_HEIGHT);
 
   render_pcb() {
-    translate([0, 0, 8])
+    translate([0, 0, STANDOFF_HEIGHT])
       mcu_pcb();
   }
 }
