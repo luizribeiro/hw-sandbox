@@ -60,6 +60,14 @@ module snapping_pin(
   }
 }
 
+module render_pcb() {
+  if (RENDER_PCBS) {
+    color("green", 0.5) {
+      children();
+    }
+  }
+}
+
 module case_side_polygon() {
   polygon(points=[
     [0, 0],
@@ -171,48 +179,46 @@ module sensor_pcb() {
   PCB_HOLE_RADIUS = 1.2;
   PCB_HOLE_DISTANCE_FROM_EDGE = 1.2 + PCB_HOLE_RADIUS;
 
-  color("green") {
-    translate([
-      -PCB_HOLE_DISTANCE_FROM_EDGE,
-      -PCB_HOLE_DISTANCE_FROM_EDGE,
-      0,
-    ])
-      difference() {
-        cube([PCB_WIDTH, PCB_HEIGHT, PCB_THICKNESS]);
+  translate([
+    -PCB_HOLE_DISTANCE_FROM_EDGE,
+    -PCB_HOLE_DISTANCE_FROM_EDGE,
+    0,
+  ])
+    difference() {
+      cube([PCB_WIDTH, PCB_HEIGHT, PCB_THICKNESS]);
 
-        translate([
-          PCB_HOLE_DISTANCE_FROM_EDGE,
-          PCB_HOLE_DISTANCE_FROM_EDGE,
-          -EPSILON,
-        ])
-          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
-            circle(r=PCB_HOLE_RADIUS);
+      translate([
+        PCB_HOLE_DISTANCE_FROM_EDGE,
+        PCB_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_HOLE_RADIUS);
 
-        translate([
-          PCB_HOLE_DISTANCE_FROM_EDGE,
-          PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
-          -EPSILON,
-        ])
-          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
-            circle(r=PCB_HOLE_RADIUS);
+      translate([
+        PCB_HOLE_DISTANCE_FROM_EDGE,
+        PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_HOLE_RADIUS);
 
-        translate([
-          PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
-          PCB_HOLE_DISTANCE_FROM_EDGE,
-          -EPSILON,
-        ])
-          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
-            circle(r=PCB_HOLE_RADIUS);
+      translate([
+        PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
+        PCB_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_HOLE_RADIUS);
 
-        translate([
-          PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
-          PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
-          -EPSILON,
-        ])
-          linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
-            circle(r=PCB_HOLE_RADIUS);
-      }
-  }
+      translate([
+        PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
+        PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_HOLE_RADIUS);
+    }
 }
 
 module sensor_support() {
@@ -226,7 +232,7 @@ module sensor_support() {
   translate([10.8 + 2.2, 18 + 2.2, 0])
     snapping_pin(standoff_height=STANDOFF_HEIGHT);
 
-  if (RENDER_PCBS) {
+  render_pcb() {
     translate([0, 0, STANDOFF_HEIGHT])
       sensor_pcb();
   }
