@@ -95,8 +95,8 @@ module case_top_mask() {
   translate([-radius, -CASE_CORNER_RADIUS, 0])
     cube([
       CASE_WIDTH + radius * 2,
+      CASE_DEPTH + CASE_CORNER_RADIUS,
       CASE_HEIGHT + CASE_CORNER_RADIUS * 2,
-      CASE_DEPTH + CASE_CORNER_RADIUS * 2,
     ]);
 }
 
