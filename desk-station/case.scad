@@ -21,7 +21,10 @@ SIDE_HOLE_DENSITY = 0.35;
 DISPLAY_PCB_WIDTH = 80;
 DISPLAY_PCB_HEIGHT = 47;
 
-$fn = $preview ? 10 : 100;
+// Misc
+EPSILON = 0.1;
+
+$fn = $preview ? 12 : 100;
 
 module snapping_pin(
   board_thickness = 2.0,
@@ -188,7 +191,7 @@ module display_support() {
 }
 
 module component_supports() {
-  translate([0, 0, -CASE_CORNER_RADIUS]) {
+  translate([0, 0, -CASE_CORNER_RADIUS + EPSILON]) {
     // these components are on the bottom face of the case
     translate([3, 10, 0])
       mcu_support();
@@ -201,12 +204,12 @@ module component_supports() {
     translate([
       0,
       -CASE_HEIGHT * sin(CASE_ANGLE),
-      -CASE_CORNER_RADIUS
+      -CASE_CORNER_RADIUS + EPSILON
     ])
     display_support();
 }
 
-union() {
+difference() {
   case_shell();
   intersection() {
     component_supports();
