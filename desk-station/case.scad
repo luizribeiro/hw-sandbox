@@ -159,6 +159,60 @@ module case_top_mask() {
     ]);
 }
 
+module mcu_pcb() {
+  PCB_WIDTH = 22.8;
+  PCB_HEIGHT = 52;
+  PCB_THICKNESS = 1.6;
+  PCB_BIG_HOLE_RADIUS = 1.2;
+  PCB_BIG_HOLE_DISTANCE_FROM_EDGE = 1.2 + PCB_BIG_HOLE_RADIUS;
+  PCB_SMALL_HOLE_RADIUS = 1.05;
+  // this is across the long axis
+  PCB_SMALL_HOLE_DISTANCE_FROM_EDGE = 1.6 + PCB_SMALL_HOLE_RADIUS;
+  // this is across the short axis
+  PCB_SMALL_HOLE_DISTANCE_FROM_OTHER_EDGE = 0.8 + PCB_SMALL_HOLE_RADIUS;
+
+  translate([
+    -PCB_BIG_HOLE_DISTANCE_FROM_EDGE,
+    -PCB_BIG_HOLE_DISTANCE_FROM_EDGE,
+    0,
+  ])
+    difference() {
+      cube([PCB_WIDTH, PCB_HEIGHT, PCB_THICKNESS]);
+
+      translate([
+        PCB_SMALL_HOLE_DISTANCE_FROM_OTHER_EDGE,
+        PCB_SMALL_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_SMALL_HOLE_RADIUS);
+
+      translate([
+        PCB_WIDTH - PCB_SMALL_HOLE_DISTANCE_FROM_OTHER_EDGE,
+        PCB_SMALL_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_SMALL_HOLE_RADIUS);
+
+      translate([
+        PCB_BIG_HOLE_DISTANCE_FROM_EDGE,
+        PCB_HEIGHT - PCB_BIG_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_BIG_HOLE_RADIUS);
+
+      translate([
+        PCB_WIDTH - PCB_BIG_HOLE_DISTANCE_FROM_EDGE,
+        PCB_HEIGHT - PCB_BIG_HOLE_DISTANCE_FROM_EDGE,
+        -EPSILON,
+      ])
+        linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+          circle(r=PCB_BIG_HOLE_RADIUS);
+    }
+}
+
 module mcu_support() {
   // back supports, which are a bit smaller
   snapping_pin(standoff_height=8);
@@ -170,6 +224,11 @@ module mcu_support() {
     snapping_pin(standoff_height=8);
   translate([15.2 + 2.2, 43.4 + 2.2, 0])
     snapping_pin(standoff_height=8);
+
+  render_pcb() {
+    translate([0, 0, 8])
+      mcu_pcb();
+  }
 }
 
 module sensor_pcb() {
