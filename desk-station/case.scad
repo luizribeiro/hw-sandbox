@@ -5,12 +5,12 @@
 // Case dimensions
 CASE_DEPTH = 55.0;
 CASE_HEIGHT = 60.0;
-CASE_THICKNESS = 5.0;
+CASE_THICKNESS = 3.0;
 CASE_WIDTH = 85.0;
 
 // Case appearence
 CASE_ANGLE = 75.0;
-CASE_CORNER_RADIUS = 5.0;
+CASE_CORNER_RADIUS = 2.5;
 
 // Side-hole settings
 CASE_HAS_HOLES = true;
@@ -21,7 +21,7 @@ SIDE_HOLE_DENSITY = 0.35;
 DISPLAY_PCB_WIDTH = 80;
 DISPLAY_PCB_HEIGHT = 47;
 
-$fn = 100;
+$fn = $preview ? 10 : 100;
 
 module snapping_pin(
   board_thickness = 2.0,
@@ -66,11 +66,9 @@ module case_side_polygon() {
 }
 
 module solid_case() {
-  rotate([90, 0, 90]) minkowski() {
-    sphere(r=CASE_CORNER_RADIUS);
+  rotate([90, 0, 90])
     linear_extrude(height=CASE_WIDTH)
       case_side_polygon();
-  }
 }
 
 module display_hole() {
@@ -82,28 +80,28 @@ module display_hole() {
     translate([
       0,
       -CASE_HEIGHT * sin(CASE_ANGLE),
-      -CASE_CORNER_RADIUS + CASE_THICKNESS / 2
+      -CASE_CORNER_RADIUS - CASE_THICKNESS - 1
     ])
     translate([(CASE_WIDTH - DISPLAY_PCB_WIDTH) / 2, 0, 0])
-    translate([SCREEN_OFFSET, SCREEN_OFFSET, -CASE_THICKNESS])
-      cube([SCREEN_WIDTH, SCREEN_HEIGHT, CASE_THICKNESS]);
+    translate([SCREEN_OFFSET, SCREEN_OFFSET, 0])
+      cube([SCREEN_WIDTH, SCREEN_HEIGHT, CASE_THICKNESS + 2]);
 }
 
 module back_hole() {
-  translate([0, CASE_DEPTH, 0])
-    cube([CASE_WIDTH, CASE_THICKNESS * 2, CASE_HEIGHT]);
+  translate([0, CASE_DEPTH + CASE_CORNER_RADIUS - 1, 0])
+    cube([CASE_WIDTH, CASE_THICKNESS + 2, CASE_HEIGHT]);
 }
 
 module case_shell() {
   difference() {
-    solid_case();
-    scale([
-      1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_WIDTH),
-      1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_DEPTH),
-      1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_HEIGHT),
-    ])
-      translate([CASE_THICKNESS / 2, CASE_THICKNESS / 2, CASE_THICKNESS / 2])
+    minkowski() {
+      sphere(r=(CASE_THICKNESS + CASE_CORNER_RADIUS));
       solid_case();
+    }
+    minkowski() {
+      sphere(r=CASE_CORNER_RADIUS);
+      solid_case();
+    }
     if (CASE_HAS_HOLES) {
       translate([-CASE_CORNER_RADIUS * 2, 0, 0])
         rotate([90, 0, 90])
@@ -128,12 +126,12 @@ module side_holes_polygon() {
 
 module case_top_mask() {
   // increase radius by 1 so we fully remove the side walls
-  radius = CASE_CORNER_RADIUS + 1;
-  translate([-radius, -CASE_CORNER_RADIUS, 0])
+  radius = CASE_CORNER_RADIUS + CASE_THICKNESS + 1;
+  translate([-radius, -radius, 0])
     cube([
       CASE_WIDTH + radius * 2,
-      CASE_DEPTH + CASE_CORNER_RADIUS,
-      CASE_HEIGHT + CASE_CORNER_RADIUS * 2,
+      CASE_DEPTH + radius,
+      CASE_HEIGHT + radius * 2,
     ]);
 }
 
@@ -190,7 +188,7 @@ module display_support() {
 }
 
 module component_supports() {
-  translate([0, 0, -CASE_CORNER_RADIUS + CASE_THICKNESS / 2]) {
+  translate([0, 0, -CASE_CORNER_RADIUS]) {
     // these components are on the bottom face of the case
     translate([3, 10, 0])
       mcu_support();
@@ -203,12 +201,18 @@ module component_supports() {
     translate([
       0,
       -CASE_HEIGHT * sin(CASE_ANGLE),
-      -CASE_CORNER_RADIUS + CASE_THICKNESS / 2
+      -CASE_CORNER_RADIUS
     ])
     display_support();
 }
 
 union() {
   case_shell();
-  component_supports();
+  intersection() {
+    component_supports();
+    minkowski() {
+      sphere(r=(CASE_THICKNESS + CASE_CORNER_RADIUS));
+      solid_case();
+    }
+  }
 }
