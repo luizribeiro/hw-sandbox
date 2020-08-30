@@ -63,12 +63,12 @@ module solid_case() {
 module case_shell() {
   difference() {
     solid_case();
-    translate([CASE_THICKNESS / 2, CASE_THICKNESS / 2, CASE_THICKNESS / 2])
-      scale([
-        1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_WIDTH),
-        1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_DEPTH),
-        1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_HEIGHT),
-      ])
+    scale([
+      1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_WIDTH),
+      1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_DEPTH),
+      1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_HEIGHT),
+    ])
+      translate([CASE_THICKNESS / 2, CASE_THICKNESS / 2, CASE_THICKNESS / 2])
       solid_case();
     if (CASE_HAS_HOLES) {
       translate([-CASE_CORNER_RADIUS * 2, 0, 0])
