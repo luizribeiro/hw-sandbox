@@ -106,10 +106,12 @@ module case_shell() {
       solid_case();
     }
     if (CASE_HAS_HOLES) {
-      translate([-CASE_CORNER_RADIUS * 2, 0, 0])
+      translate([-CASE_CORNER_RADIUS - CASE_THICKNESS - EPSILON, 0, 0])
         rotate([90, 0, 90])
-        linear_extrude(height=(CASE_WIDTH + CASE_CORNER_RADIUS * 4))
-          side_holes_polygon();
+        linear_extrude(height=(
+          CASE_WIDTH + (CASE_CORNER_RADIUS + CASE_THICKNESS) * 2 + EPSILON
+        ))
+        side_holes_polygon();
 
       display_hole();
       back_hole();
