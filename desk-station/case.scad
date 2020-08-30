@@ -17,6 +17,10 @@ CASE_HAS_HOLES = true;
 SIDE_HOLE_RADIUS = 2.5;
 SIDE_HOLE_DENSITY = 0.35;
 
+// Display PCB settings
+DISPLAY_PCB_WIDTH = 80;
+DISPLAY_PCB_HEIGHT = 47;
+
 $fn = 100;
 
 module snapping_pin(
@@ -66,15 +70,19 @@ module solid_case() {
 }
 
 module display_hole() {
+  SCREEN_OFFSET = 9;
+  SCREEN_WIDTH = 62.6;
+  SCREEN_HEIGHT = 29.6;
+
   rotate([CASE_ANGLE - 180, 0, 0])
     translate([
       0,
       -CASE_HEIGHT * sin(CASE_ANGLE),
       -CASE_CORNER_RADIUS + CASE_THICKNESS / 2
     ])
-    translate([CASE_WIDTH - 80, 0, 0])
-    translate([6, 6, -CASE_THICKNESS])
-      cube([62.6, 29.6, CASE_THICKNESS]);
+    translate([(CASE_WIDTH - DISPLAY_PCB_WIDTH) / 2, 0, 0])
+    translate([SCREEN_OFFSET, SCREEN_OFFSET, -CASE_THICKNESS])
+      cube([SCREEN_WIDTH, SCREEN_HEIGHT, CASE_THICKNESS]);
 }
 
 module back_hole() {
@@ -149,14 +157,31 @@ module sensor_support() {
 }
 
 module display_support() {
-  translate([CASE_WIDTH - 80, 0, 0]) {
-    snapping_pin(standoff_height=1.4);
-    translate([72.4 + 2.2, 0, 0])
-      snapping_pin(standoff_height=1.4);
-    translate([72.4 + 2.2, 39.4 + 2.2, 0])
-      snapping_pin(standoff_height=1.4);
-    translate([0, 39.4 + 2.2, 0])
-      snapping_pin(standoff_height=1.4);
+  HOLE_DIAMETER = 2.4;
+  HOLE_DISTANCE_FROM_EDGE = 1.4 + HOLE_DIAMETER / 2;
+  STANDOFF_HEIGHT = 1.4;
+
+  translate([(CASE_WIDTH - DISPLAY_PCB_WIDTH) / 2, 0, 0]) {
+    translate([HOLE_DISTANCE_FROM_EDGE, HOLE_DISTANCE_FROM_EDGE, 0])
+      snapping_pin(standoff_height=STANDOFF_HEIGHT);
+    translate([
+      DISPLAY_PCB_WIDTH - HOLE_DISTANCE_FROM_EDGE,
+      HOLE_DISTANCE_FROM_EDGE,
+      0,
+    ])
+      snapping_pin(standoff_height=STANDOFF_HEIGHT);
+    translate([
+      DISPLAY_PCB_WIDTH - HOLE_DISTANCE_FROM_EDGE,
+      DISPLAY_PCB_HEIGHT - HOLE_DISTANCE_FROM_EDGE,
+      0,
+    ])
+      snapping_pin(standoff_height=STANDOFF_HEIGHT);
+    translate([
+      HOLE_DISTANCE_FROM_EDGE,
+      DISPLAY_PCB_HEIGHT - HOLE_DISTANCE_FROM_EDGE,
+      0,
+    ])
+      snapping_pin(standoff_height=STANDOFF_HEIGHT);
   }
 }
 
