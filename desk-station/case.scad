@@ -4,12 +4,12 @@
 
 // Case dimensions
 CASE_DEPTH = 55.0;
-CASE_HEIGHT = 30.0;
+CASE_HEIGHT = 35.0;
 CASE_THICKNESS = 5.0;
 CASE_WIDTH = 85.0;
 
 // Case appearence
-CASE_ANGLE = 30.0;
+CASE_ANGLE = 45.0;
 CASE_CORNER_RADIUS = 5.0;
 
 // Side-hole settings
@@ -48,7 +48,7 @@ module case_side_polygon() {
     [0, 0],
     [CASE_DEPTH, 0],
     [CASE_DEPTH, CASE_HEIGHT],
-    [CASE_DEPTH * tan(CASE_ANGLE), CASE_HEIGHT],
+    [CASE_HEIGHT / tan(CASE_ANGLE), CASE_HEIGHT],
   ]);
 }
 
