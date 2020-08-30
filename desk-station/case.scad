@@ -4,12 +4,12 @@
 
 // Case dimensions
 CASE_DEPTH = 55.0;
-CASE_HEIGHT = 35.0;
+CASE_HEIGHT = 60.0;
 CASE_THICKNESS = 5.0;
 CASE_WIDTH = 85.0;
 
 // Case appearence
-CASE_ANGLE = 45.0;
+CASE_ANGLE = 75.0;
 CASE_CORNER_RADIUS = 5.0;
 
 // Side-hole settings
@@ -27,10 +27,11 @@ module snapping_pin(
   snap_cone_gap_width = 1,
   snap_cone_gap_height = 5,
   standoff_height = 5,
+  standoff_width = 3,
 ) {
   difference() {
     union() {
-      cylinder(h=standoff_height, r=snap_cone_diameter / 2);
+      cylinder(h=standoff_height, r=standoff_width / 2);
       translate([0, 0, standoff_height]) {
         cylinder(h=board_thickness, r=hole_diameter / 2);
         translate([0, 0, board_thickness])
@@ -104,7 +105,64 @@ module case_top_mask() {
     ]);
 }
 
-difference() {
-  case_shell();
-  case_top_mask();
+module mcu_support() {
+  // back supports, which are a bit smaller
+  snapping_pin(standoff_height=8);
+  translate([15.2 + 2.2, 0, 0])
+    snapping_pin(standoff_height=8);
+
+  // front supports (near USB connector)
+  translate([0, 43.4 + 2.2, 0])
+    snapping_pin(standoff_height=8);
+  translate([15.2 + 2.2, 43.4 + 2.2, 0])
+    snapping_pin(standoff_height=8);
+}
+
+module sensor_support() {
+  snapping_pin(standoff_height=25);
+  translate([0, 17.8 + 2.2, 0])
+    snapping_pin(standoff_height=25);
+  translate([10.2 + 2.2, 0, 0])
+    snapping_pin(standoff_height=25);
+  translate([10.2 + 2.2, 17.8 + 2.2, 0])
+    snapping_pin(standoff_height=25);
+}
+
+module display_support() {
+  translate([CASE_WIDTH - 80, 0, 0]) {
+    snapping_pin(standoff_height=1.4);
+    translate([72.4 + 2.2, 0, 0])
+      snapping_pin(standoff_height=1.4);
+    translate([72.4 + 2.2, 39.4 + 2.2, 0])
+      snapping_pin(standoff_height=1.4);
+    translate([0, 39.4 + 2.2, 0])
+      snapping_pin(standoff_height=1.4);
+  }
+}
+
+module component_supports() {
+  translate([0, 0, -CASE_CORNER_RADIUS + CASE_THICKNESS / 2]) {
+    // these components are on the bottom face of the case
+    translate([3, 10, 0])
+      mcu_support();
+    translate([40, 33, 0])
+      sensor_support();
+  }
+
+  // these components are on the front face of the case
+  rotate([CASE_ANGLE - 180, 0, 0])
+    translate([
+      0,
+      -CASE_HEIGHT * sin(CASE_ANGLE),
+      -CASE_CORNER_RADIUS + CASE_THICKNESS / 2
+    ])
+    display_support();
+}
+
+union() {
+  intersection() {
+    case_shell();
+    case_top_mask();
+  }
+  component_supports();
 }
