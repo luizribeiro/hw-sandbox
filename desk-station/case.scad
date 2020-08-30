@@ -77,6 +77,11 @@ module display_hole() {
       cube([62.6, 29.6, CASE_THICKNESS]);
 }
 
+module back_hole() {
+  translate([0, CASE_DEPTH, 0])
+    cube([CASE_WIDTH, CASE_THICKNESS * 2, CASE_HEIGHT]);
+}
+
 module case_shell() {
   difference() {
     solid_case();
@@ -94,6 +99,7 @@ module case_shell() {
           side_holes_polygon();
 
       display_hole();
+      back_hole();
     }
   }
 }
@@ -174,9 +180,6 @@ module component_supports() {
 }
 
 union() {
-  intersection() {
-    case_shell();
-    case_top_mask();
-  }
+  case_shell();
   component_supports();
 }
