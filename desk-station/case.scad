@@ -2,13 +2,18 @@
  * All dimensions on this file are in mm.
  */
 
-// Case settings
-CASE_ANGLE = 30.0;
-CASE_CORNER_RADIUS = 10.0;
+// Case dimensions
 CASE_DEPTH = 60.0;
 CASE_HEIGHT = 50.0;
 CASE_THICKNESS = 5.0;
 CASE_WIDTH = 90.0;
+
+// Case appearence
+CASE_ANGLE = 30.0;
+CASE_CORNER_RADIUS = 10.0;
+
+// Side-hole settings
+CASE_HAS_HOLES = true;
 SIDE_HOLE_RADIUS = 2.5;
 SIDE_HOLE_DENSITY = 0.35;
 
@@ -65,10 +70,12 @@ module case_shell() {
         1 - CASE_THICKNESS / (CASE_CORNER_RADIUS * 2 + CASE_HEIGHT),
       ])
       solid_case();
-    translate([-CASE_CORNER_RADIUS * 2, 0, 0])
-      rotate([90, 0, 90])
-      linear_extrude(height=(CASE_WIDTH + CASE_CORNER_RADIUS * 4))
-        side_holes_polygon();
+    if (CASE_HAS_HOLES) {
+      translate([-CASE_CORNER_RADIUS * 2, 0, 0])
+        rotate([90, 0, 90])
+        linear_extrude(height=(CASE_WIDTH + CASE_CORNER_RADIUS * 4))
+          side_holes_polygon();
+    }
   }
 }
 
