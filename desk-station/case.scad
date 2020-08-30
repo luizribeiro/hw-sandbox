@@ -297,6 +297,50 @@ module sensor_support() {
   }
 }
 
+module display_pcb() {
+  PCB_WIDTH = 80;
+  PCB_HEIGHT = 47;
+  PCB_THICKNESS = 1.6;
+  PCB_HOLE_RADIUS = 1.2;
+  PCB_HOLE_DISTANCE_FROM_EDGE = 1.4 + PCB_HOLE_RADIUS;
+
+  difference() {
+    cube([PCB_WIDTH, PCB_HEIGHT, PCB_THICKNESS]);
+
+    translate([
+      PCB_HOLE_DISTANCE_FROM_EDGE,
+      PCB_HOLE_DISTANCE_FROM_EDGE,
+      -EPSILON,
+    ])
+      linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+        circle(r=PCB_HOLE_RADIUS);
+
+    translate([
+      PCB_HOLE_DISTANCE_FROM_EDGE,
+      PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
+      -EPSILON,
+    ])
+      linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+        circle(r=PCB_HOLE_RADIUS);
+
+    translate([
+      PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
+      PCB_HOLE_DISTANCE_FROM_EDGE,
+      -EPSILON,
+    ])
+      linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+        circle(r=PCB_HOLE_RADIUS);
+
+    translate([
+      PCB_WIDTH - PCB_HOLE_DISTANCE_FROM_EDGE,
+      PCB_HEIGHT - PCB_HOLE_DISTANCE_FROM_EDGE,
+      -EPSILON,
+    ])
+      linear_extrude(height=PCB_THICKNESS + EPSILON * 2)
+        circle(r=PCB_HOLE_RADIUS);
+  }
+}
+
 module display_support() {
   HOLE_DIAMETER = 2.4;
   HOLE_DISTANCE_FROM_EDGE = 1.4 + HOLE_DIAMETER / 2;
@@ -323,6 +367,11 @@ module display_support() {
       0,
     ])
       snapping_pin(standoff_height=STANDOFF_HEIGHT);
+
+    render_pcb() {
+      translate([0, 0, STANDOFF_HEIGHT])
+        display_pcb();
+    }
   }
 }
 
@@ -347,6 +396,7 @@ module component_supports() {
 
 union() {
   case_shell();
+
   intersection() {
     component_supports();
     minkowski() {
