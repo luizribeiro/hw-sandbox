@@ -28,8 +28,8 @@ RENDER_PCBS = $preview;
 $fn = $preview ? 12 : 100;
 
 module snapping_pin(
-  board_thickness = 2.0,
-  hole_diameter = 1.9,
+  board_thickness = 1.8,
+  hole_diameter = 1.7,
   snap_cone_diameter = 3,
   snap_cone_height = 4,
   snap_cone_gap_width = 1,
