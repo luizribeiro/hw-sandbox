@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "hw-sandbox"
+version = "0.0.1"
+description = "My hardware sandbox"
+authors = [
+  "Luiz Ribeiro <luizribeiro@gmail.com>",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+platformio = "5.0.3"
+
+[build-system]
+requires = ["poetry>=1.0.10"]
+build-backend = "poetry.masonry.api"
