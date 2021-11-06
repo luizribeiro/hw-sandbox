@@ -126,7 +126,7 @@ tests = ["pytest", "pytz", "simplejson"]
 
 [[package]]
 name = "platformio"
-version = "5.2.1"
+version = "5.2.3"
 description = "A professional collaborative platform for embedded development. Cross-platform IDE and Unified Debugger. Static Code Analyzer and Remote Unit Testing. Multi-platform and Multi-architecture Build System. Firmware File Explorer and Memory Inspection. IoT, Arduino, CMSIS, ESP-IDF, FreeRTOS, libOpenCM3, mbedOS, Pulp OS, SPL, STM32Cube, Zephyr RTOS, ARM, AVR, Espressif (ESP8266/ESP32), FPGA, MCS-51 (8051), MSP430, Nordic (nRF51/nRF52), NXP i.MX RT, PIC32, RISC-V, STMicroelectronics (STM8/STM32), Teensy"
 category = "main"
 optional = false
@@ -143,7 +143,7 @@ pyelftools = ">=0.27,<1"
 pyserial = ">=3.0.0,<4.0.0"
 requests = ">=2.0.0,<3.0.0"
 semantic_version = ">=2.8.0,<2.9.0"
-starlette = ">=0.16.0,<0.17.0"
+starlette = ">=0.17.0,<0.18.0"
 tabulate = ">=0.8.0,<0.9.0"
 uvicorn = ">=0.15.0,<0.16.0"
 wsproto = ">=1.0.0,<1.1.0"
@@ -204,7 +204,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "starlette"
-version = "0.16.0"
+version = "0.17.0"
 description = "The little ASGI library that shines."
 category = "main"
 optional = false
@@ -215,7 +215,7 @@ anyio = ">=3.0.0,<4"
 typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
 
 [package.extras]
-full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests", "graphene"]
+full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
 
 [[package]]
 name = "tabulate"
@@ -291,7 +291,7 @@ ifaddr = ">=0.1.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "083355638d9af09a4209b20bcdd285732a7f00599d2dce823dc748f52d6c1278"
+content-hash = "2de56979d1eedf7437d0a8dc16bfd1f8758d280565a82dd66bab8766402ecadd"
 
 [metadata.files]
 aiofiles = [
@@ -347,7 +347,7 @@ marshmallow = [
     {file = "marshmallow-3.10.0.tar.gz", hash = "sha256:4ab2fdb7f36eb61c3665da67a7ce281c8900db08d72ba6bf0e695828253581f7"},
 ]
 platformio = [
-    {file = "platformio-5.2.1.tar.gz", hash = "sha256:ad039c8ca70a1c4465c9a9c2effdc63f1ea878696f99cdec394c92fbea3d150f"},
+    {file = "platformio-5.2.3.tar.gz", hash = "sha256:94584b1cfd8cc82ee5c51cbecba57e884f906b0c3f2903b136049796d62ae86a"},
 ]
 pyelftools = [
     {file = "pyelftools-0.27-py2.py3-none-any.whl", hash = "sha256:5609aa6da1123fccfae2e8431a67b4146aa7fad5b3889f808df12b110f230937"},
@@ -370,8 +370,8 @@ sniffio = [
     {file = "sniffio-1.2.0.tar.gz", hash = "sha256:c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de"},
 ]
 starlette = [
-    {file = "starlette-0.16.0-py3-none-any.whl", hash = "sha256:38eb24bf705a2c317e15868e384c1b8a12ca396e5a3c3a003db7e667c43f939f"},
-    {file = "starlette-0.16.0.tar.gz", hash = "sha256:e1904b5d0007aee24bdd3c43994be9b3b729f4f58e740200de1d623f8c3a8870"},
+    {file = "starlette-0.17.0-py3-none-any.whl", hash = "sha256:64ffd950183d474df2cf7a4018c8bbb31a481367691c70f5ace4b2d376235f72"},
+    {file = "starlette-0.17.0.tar.gz", hash = "sha256:31a889e7d7bf487f70d9d197ed7efadb47fa938c58626ed93e381480833c5b84"},
 ]
 tabulate = [
     {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
